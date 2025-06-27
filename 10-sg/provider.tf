@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
   bucket = "saiteja-practice-state"
-  key    = "sg-module-test-1"
+  key    = "sgfrontend-module-test-1"
   region = "us-east-1"
   use_lockfile = true
   encrypt = true
