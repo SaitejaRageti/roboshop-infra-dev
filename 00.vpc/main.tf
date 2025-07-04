@@ -6,5 +6,5 @@ module "aws_vpc" {
     private_subnets_cidr = var.private_subnets_cidr
     database_subnets_cidr = var.database_subnets_cidr
     is_peering_required = true
-
+    
 }

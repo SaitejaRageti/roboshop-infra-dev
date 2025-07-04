@@ -21,3 +21,23 @@ variable "bastion_sg_name" {
 variable "bastion_description" {
   default = "sg for bastion instance"
 }
+
+variable "backend_alb_sg_name" {
+  default = "backend_alb_sg"
+}
+
+variable "backend_alb_description" {
+  default = "securtiy group for backend alb"
+}
+
+variable "vpn_sg_name" {
+    default = "vpn_sg"
+  
+}
+variable "vpn_description" {
+  default = "security group for openvpn"
+}
+
+variable "vpn_ports" {
+  default = ["22","443","1194","943"]
+}
