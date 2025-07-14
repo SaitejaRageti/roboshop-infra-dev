@@ -38,6 +38,29 @@ variable "vpn_description" {
   default = "security group for openvpn"
 }
 
+variable "mongodb_sg_name" {
+    default = "mongodb_sg"
+  
+}
+variable "mongodb_description" {
+  default = "security group for openvpn"
+}
+
+variable "mongodb_ports_vpn" {
+  default = [22,27017]
+}
+
 variable "vpn_ports" {
-  default = ["22","443","1194","943"]
+  default = [22,443,1194,943]
+}
+variable "redis_ports_vpn" {
+  default = [22,6379]
+}
+
+variable "rabbitmq_ports_vpn" {
+  default = [22,5672]
+}
+
+variable "mysql_ports_vpn" {
+  default = [22,3306]
 }
