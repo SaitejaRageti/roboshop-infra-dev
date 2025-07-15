@@ -88,6 +88,16 @@ module "catalogue" {
     vpc_id = local.vpc_id
 }
 
+module "frontend_alb" {
+    #source = "../../terraform-aws-securitygroup"
+    source = "git::https://github.com/SaitejaRageti/terraform-aws-securitygroup.git?ref=main"
+    project = var.project
+    sg_name = "frontend-alb"
+    environment = var.environment
+    sg_description = "sg for frontend alb"
+    vpc_id = local.vpc_id
+}
+
 ##catalogue accepting connections from vpn bastion and backend alb
 resource "aws_security_group_rule" "catalogue_vpn_ssh" {
   type              = "ingress"
@@ -189,6 +199,35 @@ resource "aws_security_group_rule" "backend_alb_bastion" {
   security_group_id = module.backend_alb.sg_id
 }
 
+##Backend ALB
+resource "aws_security_group_rule" "backend_alb_vpn" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.backend_alb.sg_id
+}
+
+##FRONTEND-ALB
+resource "aws_security_group_rule" "frontend_alb_http" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.backend_alb.sg_id
+}
+
+resource "aws_security_group_rule" "frontend_alb_https" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = module.frontend_alb.sg_id
+}
+
 #allowing connections from all to VPN --VPN ports 22, 443, 1194, 943
 
 # resource "aws_security_group_rule" "main" {
@@ -238,13 +277,4 @@ resource "aws_security_group_rule" "vpn_943" {
 }
 
 
-##Backend ALB
-resource "aws_security_group_rule" "backend_alb_vpn" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  source_security_group_id = module.vpn.sg_id
-  security_group_id = module.backend_alb.sg_id
-}
 
